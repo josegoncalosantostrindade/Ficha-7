@@ -19,5 +19,5 @@ app.use('/',(req,res)=>{
 
 //Inicia o servidor
 app.listen(app.get('port'), () => { 
-    console.log("Start server on port "+app.get('port'))
-})
+    console.log("Start server on port " + app.get('port'))
+});
