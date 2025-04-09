@@ -9,15 +9,15 @@ app.use(express.json());
 
 //Rota de teste
 app.use('/teste',(req,res)=>{
-    res.send("Rota TESTE.");
+    res.send("Rota Teste");
 });
 
 //Rota padrão
 app.use('/',(req,res)=>{ 
-    res.send("Hello World");
+    res.send("Rota Padrão");
 });
 
 //Inicia o servidor
 app.listen(app.get('port'), () => { 
-    console.log("Start server on port " + app.get('port'))
+    console.log("Servidor iniciado na porta: " + app.get('port'))
 });
