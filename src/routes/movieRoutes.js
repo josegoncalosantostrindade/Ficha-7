@@ -2,18 +2,18 @@ const express = require('express');
 const router = express.Router();
 
 //Importar os controllers
-const Movie = require('../model/Movie');
-
-//Rota teste
-router.get('/test', (req, res) => {
-    console.log('Entrou na rota de teste');
-    res.send("Rota de teste");
-});
+const movieControllers = require('../controllers/movieControllers');
 
 //Rota para guardar um filme
 router.get('/save', (req, res) => {
     console.log('Entrou na rota de saven (Filme)');
-    res.json({status: 'Movie Saved'});
+    res.json({status: 'Filme Guardado'});
+});
+
+//Rota para listar todos os filmes
+router.get('/list', (req, res) => {
+    console.log('Entrou na rota de list (Filme)');
+    movieControllers.list(req, res);
 });
 
 module.exports = router;

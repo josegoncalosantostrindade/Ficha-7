@@ -1,5 +1,5 @@
-var Genre = require('../models/genre');
-var sequelize = require('../model/database.js');
+var Genre = require('../models/genre.js');
+var sequelize = require('../models/database.js');
 
 const controllers = {}
 

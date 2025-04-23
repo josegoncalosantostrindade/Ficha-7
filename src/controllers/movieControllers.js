@@ -1,6 +1,6 @@
-var Movies = require('../models/movies');
-var Genre = require('../models/genre');
-var sequelize = require('../model/database.js');
+var Movies = require('../models/movie.js');
+var Genre = require('../models/genre.js');
+var sequelize = require('../models/database.js');
 
 const controllers = {}
 

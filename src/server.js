@@ -1,6 +1,10 @@
 const express = require('express');
 const server = express();
 
+//Importar as rotas
+const movieRoutes = require('./routes/movieRoutes');
+const genreRoutes = require('./routes/genreRoutes');
+
 //Configurações
 server.set('port', process.env.PORT || 3000);
 
@@ -16,6 +20,10 @@ server.use('/', (req, res, next) => {
         next();
     }
 });
+
+//Rotas
+server.use('/movie', movieRoutes);
+server.use('/genre', genreRoutes);
 
 //Inicia o servidor
 server.listen(server.get('port'), () => { 
