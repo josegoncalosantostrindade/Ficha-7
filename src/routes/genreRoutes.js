@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 //Importar os controllers
-const genreControllers = require('../controllers/genreControllers');
+const generosControllers = require('../controllers/genreControllers');
 
 //Rota para guardar um género
 router.get('/save', (req, res) => {

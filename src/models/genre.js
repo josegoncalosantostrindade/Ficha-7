@@ -1,13 +1,7 @@
 var Sequelize = require('sequelize');
 var sequelize = require('./database.js');
 
-var Genre = sequelize.define('Genre', {
-    id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
-
+var Generos = sequelize.define('Generos', {
     Description: {
         type: Sequelize.STRING,
         allowNull: false
@@ -19,4 +13,4 @@ var Genre = sequelize.define('Genre', {
     timestamps: false
 });
 
-module.exports = Genre;
+module.exports = Generos;

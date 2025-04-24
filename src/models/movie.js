@@ -2,9 +2,9 @@ var Sequelize = require('sequelize');
 var sequelize = require('./database.js');
 
 //Importa o modelo de género
-var Genre = require('./genre.js');
+var Generos = require('./genre.js');
 
-var Movie = sequelize.define('Movie', {
+var Filmes = sequelize.define('Filmes', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -30,7 +30,7 @@ var Movie = sequelize.define('Movie', {
 
         //Relação com a tabela de géneros (genre.js)
         references: {
-            model: 'Genre',
+            model: Generos,
             key: 'id'
         }
     },
@@ -42,5 +42,5 @@ var Movie = sequelize.define('Movie', {
 });
 
 //
-Movie.belongsTo(Genre, { foreignKey: 'GeneroID' });
-module.exports = Movie;
+Filmes.belongsTo(Generos, { foreignKey: 'GeneroID' });
+module.exports = Filmes;
