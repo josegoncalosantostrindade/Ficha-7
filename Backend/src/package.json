@@ -1,0 +1,30 @@
+{
+  "name": "ficha-7",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/josegoncalosantostrindade/Ficha-7.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/josegoncalosantostrindade/Ficha-7/issues"
+  },
+  "homepage": "https://github.com/josegoncalosantostrindade/Ficha-7#readme",
+  "dependencies": {
+    "bootstrap": "^5.3.6",
+    "express": "^5.1.0",
+    "jquery": "^3.7.1",
+    "pg": "^8.14.1",
+    "popper.js": "^1.16.1",
+    "react-router-dom": "^7.5.3",
+    "sequelize": "^6.37.7"
+  }
+}
