@@ -1,5 +1,6 @@
 const express = require('express');
 const server = express();
+var cors = require('cors');
 
 //Importar as rotas
 const movieRoutes = require('./routes/movieRoutes');
@@ -7,6 +8,7 @@ const genreRoutes = require('./routes/genreRoutes');
 
 //Configurações
 server.set('port', process.env.PORT || 3000);
+server.use(cors());
 
 //Middleware
 server.use(express.json());
