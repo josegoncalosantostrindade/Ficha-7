@@ -22,10 +22,10 @@ server.use('/', (req, res, next) => {
 });
 
 //Rotas Filmes
-server.use('/movie', movieRoutes);
+server.use('/filmes', movieRoutes);
 
 //Rotas Géneros
-server.use('/genre', genreRoutes);
+server.use('/genero', genreRoutes);
 
 
 //Inicia o servidor
