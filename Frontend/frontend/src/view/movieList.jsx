@@ -8,10 +8,32 @@ import axios from "axios";
 const urlAPI = "http://localhost:3000/filmes/listar";
 
 const FilmeLista = () => {
+  // Define o estado inicial do array de filmes
+  const [dataFilmes, setdataFilmes] = useState([]);
+  useEffect(() => {
+    LoadFilmes();
+  }, []);
+
+  //Função para carregar a lista de filmes
+  function LoadFilmes() {
+      const url = 'http://localhost:3000/filmes/listar';
+      axios.get(url)
+        .then((res) => {
+          if(res.data.success) {
+            const data = res.data.data;
+            setdataFilmes(data);
+          } else {
+            alert('Erro no Serviço Web!');
+          }
+        })
+        .catch((err) => {{
+          alert(err);
+        }})
+
+  }
+
   return (
-    <table
-      className="table table-hover table-striped"
-    >
+    <table className="table table-hover table-striped">
       <thead className="thead-dark">
         <tr>
           <th scope="col">#</th>
@@ -36,9 +58,31 @@ const FilmeLista = () => {
             <button className="btn btn-outline-danger "> Apagar</button>
           </td>
         </tr>
+        <LoadFillData />
       </tbody>
     </table>
   );
+
+  //Função para carregar os dados dos filmes
+  function LoadFillData() {
+    return dataFilmes.map((data, index) => {º
+      return (
+        <tr key={index}>
+          <th>{data.id}</th>
+          <td>{data.titulo}</td>
+          <td>{data.descricao}</td>
+          <td>{data.foto}</td>
+          <td>{data.genero}</td>
+          <td>
+            <Link className="btn btn-outline-info">Edit</Link>
+          </td>
+          <td>
+            <button className="btn btn-outline-danger">Apagar</button>
+          </td>
+        </tr>
+      );
+    });
+  }
 };
 
 export default FilmeLista;
