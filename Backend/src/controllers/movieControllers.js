@@ -54,4 +54,22 @@ controllers.create = async (req , res) => {
     })
 }
 
+//Editar um filme
+controllers.get = async (req, res) => {
+    const { id } = req.params;
+    const data = await Filmes.findAll({
+        where: { id: id },
+        include: [Generos]
+    })
+    .then(function(data) {
+        console.log(`Editar filme: ${data}`);	        
+        return data;
+    })
+    .catch(err => {
+        console.log(`Erro ao editar filme: ${err}`);
+        return err;
+    });
+    res.json({success: true, data: data});
+}
+
 module.exports = controllers;

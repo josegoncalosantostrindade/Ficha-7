@@ -22,4 +22,9 @@ router.post('/criar', (req, res) => {
     filmesControllers.create(req, res);
 });
 
+router.get('/get/:id', (req, res) => {
+    console.log('Entrou na rota get - Filme');
+    filmesControllers.get(req, res);
+});
+
 module.exports = router;

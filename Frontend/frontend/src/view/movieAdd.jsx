@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
+import axios from "axios";
+
+const [dataFIlmes, setdataFilmes] = useState("");
+const [campTitulo, setcampTitulo] = useState("");
+const [campDescricao, setcampDescricao] = useState("");
+const [campFoto, setcampFoto] = useState("");
+const [campGenero, setcampGenero] = useState("");
 
 const FilmeAdicionar = () => {
   return (
@@ -13,8 +20,9 @@ const FilmeAdicionar = () => {
           <input
             type="text"
             className="form-control"
-            id="title"
             placeholder="Title"
+            value={campTitulo}
+            onChange={(value) => setcampTitulo(value.target.value)}
           />
         </div>
       </div>
@@ -26,8 +34,9 @@ const FilmeAdicionar = () => {
           <input
             type="text"
             className="form-control"
-            id="picture"
             placeholder="Picture"
+            value={campFoto}
+            onChange={(value) => setcampFoto(value.target.value)}
           />
         </div>
       </div>
@@ -39,64 +48,47 @@ const FilmeAdicionar = () => {
           <textarea
             type="text"
             className="form-control"
-            id="description"
             placeholder="Description"
+            value={campDescricao}
+            onChange={(value) => setcampDescricao(value.target.value)}
           />
         </div>
       </div>
+      <button
+      type="submit"
+      className="btn btn-primary"
+      onClick={() => SendSave()}
+    >
+      Save
+    </button>
+  </div>
+)};
 
-      {/*<div className="form-group row mb-3">
-        <label htmlFor="role" className="col-sm-2 col-md-1 col-form-label">
-          Foto
-        </label>
-        <div className="col-sm-10">
-          <select id="role" className="form-control">
-            <option defaultValue>Choose...</option>
-            <option value="1">Admin</option>
-            <option value="2">Project Manager</option>
-            <option value="3">Programmer</option>
-          </select>
-        </div>
-      </div>
-      <div className="form-group row mb-3">
-        <label
-          htmlFor="phone"
-          className="col-sm-2 col-md-1 col-form-label"
-        >
-          Phone
-        </label>
-        <div className="col-sm-6">
-          <input
-            className="form-control"
-            id="phone"
-            type="number"
-            placeholder="phone"
-          />
-        </div>
-      </div>
-      <div className="form-group row mb-3">
-        <label
-          htmlFor="address"
-          className="col-sm-2 col-md-1 col-form-label"
-        >
-          Address
-        </label>
-        <div className="col-sm-10">
-          <textarea
-            className="form-control"
-            id="address"
-            rows="3"
-            placeholder="1234 Main St"
-          ></textarea>
-        </div>
-      </div>*/}
-      
-      <button type="submit" className="btn btn-primary">
-        Save
-      </button>
-    </div>
-  );
-};
+function SendSave() {
+  e.preventDefault();
+  const baseurl = "http://localhost:3000/filmes/criar";
+        
+  //Cria o objeto com os dados do filme 
+  const datatpost = {
+    titulo: campTitulo,
+    descricao: campDescricao,
+    foto: campFoto,
+    genero: campGenero,
+  };
+
+  axios
+  .post(baseUrl, datapost)
+  .then((response) => {
+    if (response.data.success === true) {
+      alert(response.data.message);
+    } else {
+      alert(response.data.message);
+    }
+  })
+  .catch((error) => {
+    alert("Error 34 " + error);
+  });
+}
 
 
 export default FilmeAdicionar;
