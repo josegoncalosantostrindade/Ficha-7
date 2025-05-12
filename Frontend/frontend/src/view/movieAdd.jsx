@@ -1,94 +1,124 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import axios from "axios";
 
-const [dataFilmes, setdataFilmes] = useState("");
-const [campTitulo, setcampTitulo] = useState("");
-const [campDescricao, setcampDescricao] = useState("");
-const [campFoto, setcampFoto] = useState("");
-const [campGenero, setcampGenero] = useState("");
-
 const FilmeAdicionar = () => {
+  const [campTitulo, setCampTitulo] = useState("");
+  const [campDescricao, setCampDescricao] = useState("");
+  const [campFoto, setCampFoto] = useState("");
+  const [campGenero, setCampGenero] = useState("");
+
+  function SendSave(e) {
+    e.preventDefault();
+    const baseUrl = "http://localhost:3000/filmes/criar";
+
+    // Cria o objeto com os dados do filme
+    const datapost = {
+      title: campTitulo,
+      description: campDescricao,
+      picture: campFoto,
+      generoId: parseInt(campGenero), // Converte para número
+    };
+
+    axios
+      .post(baseUrl, datapost, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        if (response.data.success) {
+          alert(response.data.message);
+          // Limpa o formulário após sucesso
+          setCampTitulo("");
+          setCampDescricao("");
+          setCampFoto("");
+          setCampGenero("");
+        } else {
+          alert(response.data.message);
+        }
+      })
+      .catch((error) => {
+        alert("Erro: " + error.message);
+      });
+  }
+
   return (
-    <div>
-      <div className="form-group row mb-3">
-        <label htmlFor="name" className="col-sm-2 col-md-1 col-form-label">
-          Título
-        </label>
-        <div className="col-sm-10">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Title"
-            value={campTitulo}
-            onChange={(value) => setcampTitulo(value.target.value)}
-          />
+    <div className="container">
+      <h2>Adicionar Filme</h2>
+      <form onSubmit={SendSave}>
+        <div className="form-group row mb-3">
+          <label htmlFor="title" className="col-sm-2 col-form-label">
+            Título
+          </label>
+          <div className="col-sm-10">
+            <input
+              type="text"
+              className="form-control"
+              id="title"
+              placeholder="Título"
+              value={campTitulo}
+              onChange={(e) => setCampTitulo(e.target.value)}
+              required
+            />
+          </div>
         </div>
-      </div>
-      <div className="form-group row mb-3">
-        <label htmlFor="picture" className="col-sm-2 col-md-1 col-form-label">
-          Imagem
-        </label>
-        <div className="col-sm-10">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Picture"
-            value={campFoto}
-            onChange={(value) => setcampFoto(value.target.value)}
-          />
+        <div className="form-group row mb-3">
+          <label htmlFor="description" className="col-sm-2 col-form-label">
+            Descrição
+          </label>
+          <div className="col-sm-10">
+            <textarea
+              className="form-control"
+              id="description"
+              placeholder="Descrição"
+              value={campDescricao}
+              onChange={(e) => setCampDescricao(e.target.value)}
+              required
+            />
+          </div>
         </div>
-      </div>
-      <div className="form-group row mb-3">
-        <label htmlFor="description" className="col-sm-2 col-md-1 col-form-label">
-          Descrição
-        </label>
-        <div className="col-sm-10">
-          <textarea
-            type="text"
-            className="form-control"
-            placeholder="Description"
-            value={campDescricao}
-            onChange={(value) => setcampDescricao(value.target.value)}
-          />
+        <div className="form-group row mb-3">
+          <label htmlFor="picture" className="col-sm-2 col-form-label">
+            Imagem
+          </label>
+          <div className="col-sm-10">
+            <input
+              type="text"
+              className="form-control"
+              id="picture"
+              placeholder="URL da imagem"
+              value={campFoto}
+              onChange={(e) => setCampFoto(e.target.value)}
+            />
+          </div>
         </div>
-      </div>
-      <button
-      type="submit"
-      className="btn btn-primary"
-      onClick={() => SendSave()}
-    >
-      Save
-    </button>
-  </div>
-)};
-
-function SendSave() {
-  e.preventDefault();
-  const baseurl = "http://localhost:3000/filmes/criar";
-        
-  //Cria o objeto com os dados do filme 
-  const datatpost = {
-    titulo: campTitulo,
-    descricao: campDescricao,
-    foto: campFoto,
-    genero: campGenero,
-  };
-
-  axios
-  .post(baseUrl, datapost)
-  .then((response) => {
-    if (response.data.success === true) {
-      alert(response.data.message);
-    } else {
-      alert(response.data.message);
-    }
-  })
-  .catch((error) => {
-    alert("Error 34 " + error);
-  });
-}
-
+        <div className="form-group row mb-3">
+          <label htmlFor="genero" className="col-sm-2 col-form-label">
+            Gênero
+          </label>
+          <div className="col-sm-10">
+            <select
+              className="form-control"
+              id="genero"
+              value={campGenero}
+              onChange={(e) => setCampGenero(e.target.value)}
+              required
+            >
+              <option value="">Selecione um género</option>
+              <option value="1">Comédia</option>
+              <option value="2">Ação</option>
+              <option value="3">Violência</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" className="btn btn-primary">
+          Salvar
+        </button>
+      </form>
+    </div>
+  );
+};
 
 export default FilmeAdicionar;

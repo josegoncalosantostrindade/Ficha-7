@@ -1,126 +1,124 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-//URL base para o API
-const baseUrl = "http://localhost:3000/";
+const baseUrl = "http://localhost:3000";
 
 const FilmeEditar = () => {
-  const [dataFilmes, setdataFilmes] = useState("");
-  const [campTitulo, setcampTitulo] = useState("");
-  const [campDescricao, setcampDescricao] = useState("");
-  const [campFoto, setcampFoto] = useState("");
-  const [stringGenero, setstringGenero] = useState("");
-  const [selectGenero, setselectGenero] = useState("");
+  const [campTitulo, setCampTitulo] = useState("");
+  const [campDescricao, setCampDescricao] = useState("");
+  const [campFoto, setCampFoto] = useState("");
+  const [campGenero, setCampGenero] = useState("");
   const { filmeId } = useParams();
 
-  //console.log(movieId);
   useEffect(() => {
-    const url = baseUrl + "/filmes/get/" + filmeId;
+    const url = `${baseUrl}/filmes/get/${filmeId}`;
     axios
       .get(url)
       .then((res) => {
         if (res.data.success) {
-          const data = res.data.data[0];
-          setdataFilmes(data);
-          setcampTitulo(data.titulo);
-          setcampDescricao(data.descricao);
-          setcampFoto(data.foto);
-          setstringGenero(data.genero.genero);
-          setselectGenero(data.generoId);
-          console.log(JSON.stringify(data.role.role));
+          const data = res.data.data;
+          setCampTitulo(data.title);
+          setCampDescricao(data.description);
+          setCampFoto(data.picture || "");
+          setCampGenero(data.generoId.toString());
         } else {
           alert("Erro no Serviço Web");
         }
       })
       .catch((error) => {
-        alert("Erro no servidor: " + error);
+        alert("Erro no servidor: " + error.message);
       });
-  }, []);
+  }, [filmeId]);
 
-  function SendUpdate() {
-    // url de backend
-    const url = baseUrl + "/filmes/editar/" + filmeId;
-    
+  function SendUpdate(e) {
+    e.preventDefault();
+    const url = `${baseUrl}/filmes/editar/${filmeId}`;
+
     const datapost = {
-      titulo: campTitulo,
-      descricao: campDescricao,
-      foto: campFoto,
-      genero: selectGenero,
+      title: campTitulo,
+      description: campDescricao,
+      picture: campFoto,
+      generoId: parseInt(campGenero),
     };
+
     axios
-      .post(url, datapost)
+      .post(url, datapost, { // Mude para .put se o backend usa PUT
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((response) => {
-        if (response.data.success === true) {
+        if (response.data.success) {
           alert(response.data.message);
         } else {
-          alert("Erro");
+          alert("Erro: " + response.data.message);
         }
       })
       .catch((error) => {
-        alert("Erro 34 " + error);
+        alert("Erro: " + error.message);
       });
   }
 
   return (
-    <div>
-      <div className="form-row justify-content-center">
-        <div className="form-group col-md-6">
-          <label htmlFor="inputPassword4">Título</label>
+    <div className="container">
+      <h2>Editar Filme</h2>
+      <form onSubmit={SendUpdate}>
+        <div className="form-group mb-3">
+          <label htmlFor="title">Título</label>
           <input
             type="text"
             className="form-control"
-            placeholder="What is the movie title?"
+            id="title"
+            placeholder="Título do filme"
             value={campTitulo}
-            onChange={(value) => setcampTitulo(value.target.value)}
+            onChange={(e) => setCampTitulo(e.target.value)}
+            required
           />
         </div>
-        <div className="form-group col-md-6">
-          <label htmlFor="inputEmail4">Descrição</label>
+        <div className="form-group mb-3">
+          <label htmlFor="description">Descrição</label>
+          <textarea
+            className="form-control"
+            id="description"
+            placeholder="Sobre o filme"
+            value={campDescricao}
+            onChange={(e) => setCampDescricao(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group mb-3">
+          <label htmlFor="picture">Foto</label>
           <input
             type="text"
             className="form-control"
-            placeholder="What is the movie about?"
-            value={campDescricao}
-            onChange={(value) => setcampEmail(value.target.value)}
+            id="picture"
+            placeholder="URL da imagem"
+            value={campFoto}
+            onChange={(e) => setCampFoto(e.target.value)}
           />
         </div>
-      </div>
-      <div className="form-row">
-        <div className="form-group col-md-6">
-          <label htmlFor="inputState">Género</label>
+        <div className="form-group mb-3">
+          <label htmlFor="genero">Gênero</label>
           <select
-            id="inputState"
             className="form-control"
-            onChange={(value) => setstringRole(value.target.value)}
+            id="genero"
+            value={campGenero}
+            onChange={(e) => setCampGenero(e.target.value)}
+            required
           >
-            <option value={selectGenero}>{stringGenero}</option>
+            <option value="">Selecione um gênero</option>
             <option value="1">Comédia</option>
             <option value="2">Ação</option>
             <option value="3">Violência</option>
           </select>
         </div>
-        <div className="form-group col-md-6">
-          <label htmlFor="inputEmail4">Foto</label>
-          <input
-            type="link"
-            className="form-control"
-            placeholder="WHat is the movie banner link?"
-            value={campPhone}
-            onChange={(value) => setcampFoto(value.target.value)}
-          />
-        </div>
-      </div>
-      <button
-        type="submit"
-        class="btn btn-primary"
-        onClick={() => SendUpdate()}
-      >
-        Update
-      </button>
+        <button type="submit" className="btn btn-primary">
+          Atualizar
+        </button>
+      </form>
     </div>
   );
 };

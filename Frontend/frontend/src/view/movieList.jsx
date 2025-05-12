@@ -4,85 +4,96 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-//Importa o modelo de género
 const urlAPI = "http://localhost:3000/filmes/listar";
 
 const FilmeLista = () => {
-  // Define o estado inicial do array de filmes
-  const [dataFilmes, setdataFilmes] = useState([]);
+  const [dataFilmes, setDataFilmes] = useState([]);
+  const [loading, setLoading] = useState(true); // Estado de carregamento
+  const [error, setError] = useState(null); // Estado de erro
+
   useEffect(() => {
     LoadFilmes();
   }, []);
 
-  //Função para carregar a lista de filmes
   function LoadFilmes() {
-      const url = 'http://localhost:3000/filmes/listar';
-      axios.get(url)
-        .then((res) => {
-          if(res.data.success) {
-            const data = res.data.data;
-            setdataFilmes(data);
-          } else {
-            alert('Erro no Serviço Web!');
-          }
-        })
-        .catch((err) => {{
-          alert(err);
-        }})
+    setLoading(true); // Inicia o carregamento
+    axios
+      .get(urlAPI)
+      .then((res) => {
+        console.log("Resposta da API:", res.data);
+        if (res.data.success) {
+          setDataFilmes(res.data.data);
+          console.log("Dados setados em dataFilmes:", res.data.data);
+        } else {
+          setError("Erro no Serviço Web!");
+        }
+      })
+      .catch((err) => {
+        console.error("Erro na requisição:", err);
+        setError("Erro: " + err.message);
+      })
+      .finally(() => {
+        setLoading(false); // Finaliza o carregamento
+      });
+  }
 
+  if (loading) {
+    return <div className="container">Carregando filmes...</div>;
+  }
+
+  if (error) {
+    return <div className="container text-danger">Erro: {error}</div>;
   }
 
   return (
-    <table className="table table-hover table-striped">
-      <thead className="thead-dark">
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Título</th>
-          <th scope="col">Descrição</th>
-          <th scope="col">Foto</th>
-          <th scope="col">Género</th>
-          <th colSpan="2">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th>1</th>
-          <td>Title</td>
-          <td>Description</td>
-          <td>Picture</td>
-          <td>Genre</td>
-          <td>
-            <Link className="btn btn-outline-info " to={"filmes/editar/"+data.id}> Editar</Link>
-          </td>
-          <td>
-            <button className="btn btn-outline-danger "> Apagar</button>
-          </td>
-        </tr>
-        <LoadFillData />
-      </tbody>
-    </table>
+    <div className="container">
+      <h2>Lista de Filmes</h2>
+      {dataFilmes.length === 0 ? (
+        <p>Nenhum filme encontrado.</p>
+      ) : (
+        <table className="table table-hover table-striped">
+          <thead className="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Título</th>
+              <th scope="col">Descrição</th>
+              <th scope="col">Foto</th>
+              <th scope="col">Gênero</th>
+              <th colSpan="2">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dataFilmes.map((data, index) => (
+              <tr key={index}>
+                <th>{data.id}</th>
+                <td>{data.title}</td>
+                <td>{data.description}</td>
+                <td>
+                  {data.picture ? (
+                    <img src={data.picture} alt={data.title} width="50" />
+                  ) : (
+                    "Sem imagem"
+                  )}
+                </td>
+                <td>{data.Genero?.description || "Sem gênero"}</td>
+                <td>
+                  <Link
+                    className="btn btn-outline-info"
+                    to={`/filmes/editar/${data.id}`}
+                  >
+                    Editar
+                  </Link>
+                </td>
+                <td>
+                  <button className="btn btn-outline-danger">Apagar</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
   );
-
-  //Função para carregar os dados dos filmes
-  function LoadFillData() {
-    return dataFilmes.map((data, index) => {º
-      return (
-        <tr key={index}>
-          <th>{data.id}</th>
-          <td>{data.titulo}</td>
-          <td>{data.descricao}</td>
-          <td>{data.foto}</td>
-          <td>{data.genero}</td>
-          <td>
-            <Link className="btn btn-outline-info">Edit</Link>
-          </td>
-          <td>
-            <button className="btn btn-outline-danger">Apagar</button>
-          </td>
-        </tr>
-      );
-    });
-  }
 };
 
 export default FilmeLista;
