@@ -2,7 +2,12 @@ var Sequelize = require('sequelize');
 var sequelize = require('./database.js');
 
 var Generos = sequelize.define('Generos', {
-    Description: {
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    description: {
         type: Sequelize.STRING,
         allowNull: false
     }

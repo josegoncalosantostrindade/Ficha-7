@@ -1,14 +1,26 @@
-controllers.get = async (req,res) => {
+controllers.update = async (req, res) => {
+  // parameter get id
   const { id } = req.params;
-  const data = await Employee.findAll({
-  where: { id: id },
-  include: [ Role ]
-  })
-  .then(function(data){
-  return data;
-  })
-  .catch(error =>{
-  return error;
-  })
-  res.json({ success: true, data: data });
-  }
+  // parameter POST
+  const { name, email, address, phone, role } = req.body;
+  // Update data
+  const data = await Employee.update(
+    {
+      name: name,
+      email: email,
+      address: address,
+      phone: phone,
+      roleId: role,
+    },
+    {
+      where: { id: id },
+    }
+  )
+    .then(function (data) {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+  res.json({ success: true, data: data, message: "Updated successful" });
+};

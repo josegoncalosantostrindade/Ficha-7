@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import axios from "axios";
 
-const [dataFIlmes, setdataFilmes] = useState("");
+const [dataFilmes, setdataFilmes] = useState("");
 const [campTitulo, setcampTitulo] = useState("");
 const [campDescricao, setcampDescricao] = useState("");
 const [campFoto, setcampFoto] = useState("");

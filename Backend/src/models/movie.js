@@ -11,21 +11,21 @@ var Filmes = sequelize.define('Filmes', {
         autoIncrement: true
     },
 
-    Description: {
+    description: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+
+    title: {
         type: Sequelize.STRING,
         allowNull: false
     },
 
-    Title: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-
-    Picture: {
+    picture: {
         type: Sequelize.STRING
     },
 
-    GeneroID: {
+    generoId: {
         type: Sequelize.INTEGER,
 
         //Relação com a tabela de géneros (genre.js)
@@ -42,5 +42,5 @@ var Filmes = sequelize.define('Filmes', {
 });
 
 //
-Filmes.belongsTo(Generos, { foreignKey: 'GeneroID' });
+Filmes.belongsTo(Generos, { foreignKey: 'generoId' });
 module.exports = Filmes;

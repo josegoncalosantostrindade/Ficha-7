@@ -52,7 +52,7 @@ const FilmeLista = () => {
           <td>Picture</td>
           <td>Genre</td>
           <td>
-            <button className="btn btn-outline-info "> Editar</button>
+            <Link className="btn btn-outline-info " to={"filmes/editar/"+data.id}> Editar</Link>
           </td>
           <td>
             <button className="btn btn-outline-danger "> Apagar</button>

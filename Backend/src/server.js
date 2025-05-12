@@ -9,26 +9,13 @@ const genreRoutes = require('./routes/genreRoutes');
 //Configurações
 server.set('port', process.env.PORT || 3000);
 server.use(cors());
-
-//Middleware
-server.use(express.json());
-
-//Rota Padrão
-server.use('/', (req, res, next) => {
-    if (req.path === '/') {
-        console.log('Entrou na rota base');
-        res.send("Rota Base");
-    } else {
-        next();
-    }
-});
+server.use(express.json())
 
 //Rotas Filmes
 server.use('/filmes', movieRoutes);
 
 //Rotas Géneros
 server.use('/genero', genreRoutes);
-
 
 //Inicia o servidor
 server.listen(server.get('port'), () => { 
