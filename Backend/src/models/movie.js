@@ -22,7 +22,7 @@ var Filmes = sequelize.define('Filmes', {
     },
 
     picture: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
     },
 
     generoId: {

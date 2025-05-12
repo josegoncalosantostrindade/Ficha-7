@@ -42,7 +42,7 @@ function App() {
         <div className="container py-4">
           <Routes>
             <Route path="/filmes/" element={<FilmeLista />} />
-            <Route path="/filmes/criar" element={<FilmeAdicionar />} />
+            <Route path="/filmes/adicionar" element={<FilmeAdicionar />} />
             <Route path="/filmes/editar/:filmeId" element={<FilmeEditar />} />
           </Routes>
         </div>
