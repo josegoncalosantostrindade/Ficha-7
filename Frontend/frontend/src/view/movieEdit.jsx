@@ -45,7 +45,7 @@ const FilmeEditar = () => {
     };
 
     axios
-      .post(url, datapost, { // Mude para .put se o backend usa PUT
+      .put(url, datapost, {
         headers: {
           "Content-Type": "application/json",
         },

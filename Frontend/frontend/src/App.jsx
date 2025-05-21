@@ -11,7 +11,7 @@ function App() {
       <div className="App">
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
           <div className="container-fluid">
-            <a className="navbar-brand text-danger" href="/filmes/">
+            <a className="navbar-brand text-danger" href="/">
               Movies
             </a>
             <button
@@ -41,7 +41,7 @@ function App() {
         </nav>
         <div className="container py-4">
           <Routes>
-            <Route path="/filmes/" element={<FilmeLista />} />
+            <Route path="/" element={<FilmeLista />} />
             <Route path="/filmes/adicionar" element={<FilmeAdicionar />} />
             <Route path="/filmes/editar/:filmeId" element={<FilmeEditar />} />
           </Routes>

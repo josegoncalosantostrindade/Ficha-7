@@ -39,7 +39,6 @@ controllers.list = async (req, res) => {
 
 //Criar um filme
 controllers.create = async (req, res) => {
-  
   // Verifica se req.body existe
   if (!req.body) {
     return res.status(400).json({
@@ -105,7 +104,7 @@ controllers.get = async (req, res) => {
 
 //Editar um filme
 controllers.update = async (req, res) => {
-  //encontrar oid
+  //encontrar o id
   const { id } = req.params;
 
   // parameter POST
@@ -132,6 +131,34 @@ controllers.update = async (req, res) => {
       return error;
     });
   res.json({ success: true, data: data, message: "Sucesso na edição" });
+};
+
+//Eliminar um filme
+controllers.delete = async (req, res) => {
+  //parâmetros por post
+  const { id } = req.params;
+
+  try {
+    // Deleta o filme com o ID fornecido
+    const del = await Filmes.destroy({
+      where: { id: id },
+    });
+
+    if (del === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Filme não encontrado",
+      });
+    }
+
+    res.json({ success: true, message: "Filme eliminado com sucesso!" });
+  } catch (err) {
+    console.error(`Erro ao eliminar filme: ${err}`);
+    res.status(500).json({
+      success: false,
+      message: "Erro ao eliminar filme",
+    });
+  }
 };
 
 module.exports = controllers;

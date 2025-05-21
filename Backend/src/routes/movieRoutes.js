@@ -34,4 +34,10 @@ router.put('/editar/:id', (req, res) => {
     filmesControllers.update(req, res);
 });
 
+//Rota para eliminar um filme
+router.delete('/eliminar/:id', (req, res) => {
+    console.log('Entrou na rota eliminar - Filme');
+    filmesControllers.delete(req, res);
+});
+
 module.exports = router;

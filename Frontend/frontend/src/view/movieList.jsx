@@ -1,5 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
+import Swal from "sweetalert2";
+import "sweetalert2/src/sweetalert2.scss";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -23,7 +25,7 @@ const FilmeLista = () => {
         console.log("Resposta da API:", res.data);
         if (res.data.success) {
           setDataFilmes(res.data.data);
-          console.log("Dados setados em dataFilmes:", res.data.data);
+          console.log("Dados sem dados em dataFilmes:", res.data.data);
         } else {
           setError("Erro no Serviço Web!");
         }
@@ -43,6 +45,43 @@ const FilmeLista = () => {
 
   if (error) {
     return <div className="container text-danger">Erro: {error}</div>;
+  }
+
+  function OnDelete(id) {
+    Swal.fire({
+      title: "Tens a certeza?",
+      text: "Não vai ser possível recuperar após eliminado!",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sim, eliminar!",
+      cancelButtonText: "Não",
+    }).then((result) => {
+      if (result.value) {
+        SendDelete(id);
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire("Cancelado", "O teu filme está a salvo :)", "error");
+      }
+    });
+  }
+
+  function SendDelete(userId) {
+    //url do backend
+    const baseUrl = `http://localhost:3000/filmes/eliminar/${userId}`;
+    
+    //network
+    axios
+      .delete(baseUrl, {
+        id: userId,
+      })
+      .then((response) => {
+        if (response.data.success) {
+          Swal.fire("Eliminado!", "O teu filme doi eliminado", "success");
+          LoadFilmes();
+        }
+      })
+      .catch((error) => {
+        alert("Erro 325 ");
+      });
   }
 
   return (
@@ -85,7 +124,12 @@ const FilmeLista = () => {
                   </Link>
                 </td>
                 <td>
-                  <button className="btn btn-outline-danger">Apagar</button>
+                  <button
+                    class="btn btn-outline-danger"
+                    onClick={() => OnDelete(data.id)}
+                  >
+                    Apagar
+                  </button>
                 </td>
               </tr>
             ))}
