@@ -10,32 +10,30 @@ const urlAPI = "http://localhost:3000/filmes/listar";
 
 const FilmeLista = () => {
   const [dataFilmes, setDataFilmes] = useState([]);
-  const [loading, setLoading] = useState(true); // Estado de carregamento
-  const [error, setError] = useState(null); // Estado de erro
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [search, setSearch] = useState(""); 
 
   useEffect(() => {
     LoadFilmes();
   }, []);
 
   function LoadFilmes() {
-    setLoading(true); // Inicia o carregamento
+    setLoading(true);
     axios
       .get(urlAPI)
       .then((res) => {
-        console.log("Resposta da API:", res.data);
         if (res.data.success) {
           setDataFilmes(res.data.data);
-          console.log("Dados sem dados em dataFilmes:", res.data.data);
         } else {
           setError("Erro no Serviço Web!");
         }
       })
       .catch((err) => {
-        console.error("Erro na requisição:", err);
         setError("Erro: " + err.message);
       })
       .finally(() => {
-        setLoading(false); // Finaliza o carregamento
+        setLoading(false);
       });
   }
 
@@ -65,29 +63,40 @@ const FilmeLista = () => {
   }
 
   function SendDelete(userId) {
-    //url do backend
     const baseUrl = `http://localhost:3000/filmes/eliminar/${userId}`;
-    
-    //network
     axios
-      .delete(baseUrl, {
-        id: userId,
-      })
+      .delete(baseUrl)
       .then((response) => {
         if (response.data.success) {
-          Swal.fire("Eliminado!", "O teu filme doi eliminado", "success");
+          Swal.fire("Eliminado!", "O teu filme foi eliminado", "success");
           LoadFilmes();
         }
       })
-      .catch((error) => {
-        alert("Erro 325 ");
+      .catch(() => {
+        alert("Erro ao eliminar filme");
       });
   }
+
+  // Filtra os filmes conforme o texto da barra de pesquisa
+  const filmesFiltrados = dataFilmes.filter(
+    (data) =>
+      data.title.toLowerCase().includes(search.toLowerCase()) ||
+      data.description.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="container">
       <h2>Lista de Filmes</h2>
-      {dataFilmes.length === 0 ? (
+      <div className="mb-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Pesquisar por título ou descrição..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
+      {filmesFiltrados.length === 0 ? (
         <p>Nenhum filme encontrado.</p>
       ) : (
         <table className="table table-hover table-striped">
@@ -97,12 +106,12 @@ const FilmeLista = () => {
               <th scope="col">Título</th>
               <th scope="col">Descrição</th>
               <th scope="col">Foto</th>
-              <th scope="col">Gênero</th>
+              <th scope="col">Género</th>
               <th colSpan="2">Ações</th>
             </tr>
           </thead>
           <tbody>
-            {dataFilmes.map((data, index) => (
+            {filmesFiltrados.map((data, index) => (
               <tr key={index}>
                 <th>{data.id}</th>
                 <td>{data.title}</td>
@@ -114,7 +123,7 @@ const FilmeLista = () => {
                     "Sem imagem"
                   )}
                 </td>
-                <td>{data.Genero?.description || "Sem gênero"}</td>
+                <td>{data.Genero?.description || "Sem género"}</td>
                 <td>
                   <Link
                     className="btn btn-outline-info"
@@ -125,7 +134,7 @@ const FilmeLista = () => {
                 </td>
                 <td>
                   <button
-                    class="btn btn-outline-danger"
+                    className="btn btn-outline-danger"
                     onClick={() => OnDelete(data.id)}
                   >
                     Apagar

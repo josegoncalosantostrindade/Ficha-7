@@ -11,6 +11,7 @@ const FilmeEditar = () => {
   const [campDescricao, setCampDescricao] = useState("");
   const [campFoto, setCampFoto] = useState("");
   const [campGenero, setCampGenero] = useState("");
+  const [generos, setGeneros] = useState([]);
   const { filmeId } = useParams();
 
   useEffect(() => {
@@ -23,7 +24,7 @@ const FilmeEditar = () => {
           setCampTitulo(data.title);
           setCampDescricao(data.description);
           setCampFoto(data.picture || "");
-          setCampGenero(data.generoId.toString());
+          setCampGenero(data.generoId ? data.generoId.toString() : "");
         } else {
           alert("Erro no Serviço Web");
         }
@@ -32,6 +33,15 @@ const FilmeEditar = () => {
         alert("Erro no servidor: " + error.message);
       });
   }, [filmeId]);
+
+  useEffect(() => {
+    axios
+      .get(`${baseUrl}/genero/listar`)
+      .then((res) => {
+        if (res.data.success) setGeneros(res.data.data);
+      })
+      .catch(() => setGeneros([]));
+  }, []);
 
   function SendUpdate(e) {
     e.preventDefault();
@@ -101,7 +111,7 @@ const FilmeEditar = () => {
           />
         </div>
         <div className="form-group mb-3">
-          <label htmlFor="genero">Gênero</label>
+          <label htmlFor="genero">Género</label>
           <select
             className="form-control"
             id="genero"
@@ -109,10 +119,12 @@ const FilmeEditar = () => {
             onChange={(e) => setCampGenero(e.target.value)}
             required
           >
-            <option value="">Selecione um gênero</option>
-            <option value="1">Comédia</option>
-            <option value="2">Ação</option>
-            <option value="3">Violência</option>
+            <option value="">Selecione um género</option>
+            {generos.map((g) => (
+              <option key={g.id} value={g.id}>
+                {g.description}
+              </option>
+            ))}
           </select>
         </div>
         <button type="submit" className="btn btn-primary">

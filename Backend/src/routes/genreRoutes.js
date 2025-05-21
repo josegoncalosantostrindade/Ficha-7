@@ -10,4 +10,10 @@ router.get('/', (req, res) => {
     res.json({status: 'API de Géneros'});
 });
 
+//Rota para listar todos os géneros
+router.get('/listar', (req, res) => {
+    console.log('Entrou na rota listar - Género');
+    generosControllers.list(req, res);
+});
+
 module.exports = router;

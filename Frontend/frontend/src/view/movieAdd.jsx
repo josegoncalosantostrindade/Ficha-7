@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import axios from "axios";
@@ -8,6 +8,17 @@ const FilmeAdicionar = () => {
   const [campDescricao, setCampDescricao] = useState("");
   const [campFoto, setCampFoto] = useState("");
   const [campGenero, setCampGenero] = useState("");
+  const [generos, setGeneros] = useState([]);
+
+  //Estado para armazenar os géneros
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/genero/listar")
+      .then((res) => {
+        if (res.data.success) setGeneros(res.data.data);
+      })
+      .catch(() => setGeneros([]));
+  }, []);
 
   function SendSave(e) {
     e.preventDefault();
@@ -96,7 +107,7 @@ const FilmeAdicionar = () => {
         </div>
         <div className="form-group row mb-3">
           <label htmlFor="genero" className="col-sm-2 col-form-label">
-            Gênero
+            Género
           </label>
           <div className="col-sm-10">
             <select
@@ -107,10 +118,12 @@ const FilmeAdicionar = () => {
               required
             >
               <option value="">Selecione um género</option>
-              <option value="1">Comédia</option>
-              <option value="2">Ação</option>
-              <option value="3">Violência</option>
-            </select>
+              {generos.map((g) => (
+                <option key={g.id} value={g.id}>
+                  {g.description}
+                </option>
+              ))}
+              </select>
           </div>
         </div>
         <button type="submit" className="btn btn-primary">

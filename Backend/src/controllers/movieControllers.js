@@ -4,8 +4,6 @@ var sequelize = require("../models/database.js");
 
 const controllers = {};
 
-{
-  /*}
 //Sincroniza com a base de dados
 sequelize
   .sync()
@@ -17,8 +15,6 @@ sequelize
   .catch((err) =>
     console.error("Erro ao sincronizar com a base de dados:", err)
   );
-*/
-}
 
 //Listar todos os filmes
 controllers.list = async (req, res) => {
@@ -87,19 +83,22 @@ controllers.create = async (req, res) => {
 //Encontrar um filme
 controllers.get = async (req, res) => {
   const { id } = req.params;
-  const data = await Filmes.findAll({
-    where: { id: id },
-    include: [Generos],
-  })
-    .then(function (data) {
-      console.log(`Editar filme: ${data}`);
-      return data;
-    })
-    .catch((err) => {
-      console.log(`Erro ao editar filme: ${err}`);
-      return err;
+  try {
+    const data = await Filmes.findOne({
+      where: { id: id },
+      include: [Generos],
     });
-  res.json({ success: true, data: data });
+    if (!data) {
+      return res.status(404).json({
+        success: false,
+        message: "Filme não encontrado",
+      });
+    }
+    res.json({ success: true, data: data });
+  } catch (err) {
+    console.log(`Erro ao editar filme: ${err}`);
+    res.status(500).json({ success: false, message: "Erro ao editar filme" });
+  }
 };
 
 //Editar um filme
