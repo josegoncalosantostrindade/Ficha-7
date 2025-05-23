@@ -35,7 +35,7 @@ const FilmeLista = () => {
   }
 
   if (loading) {
-    return <div className="container">Carregando filmes...</div>;
+    return <div className="container">A carregar os filmes...</div>;
   }
 
   if (error) {
