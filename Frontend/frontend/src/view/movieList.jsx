@@ -1,10 +1,7 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min";
-import Swal from "sweetalert2";
-import "sweetalert2/src/sweetalert2.scss";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { toast } from "sonner";
 
 const urlAPI = "http://localhost:3000/filmes/listar";
 
@@ -46,20 +43,40 @@ const FilmeLista = () => {
   }
 
   function OnDelete(id) {
-    Swal.fire({
-      title: "Tens a certeza?",
-      text: "Não vai ser possível recuperar após eliminado!",
-      type: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Sim, eliminar!",
-      cancelButtonText: "Não",
-    }).then((result) => {
-      if (result.value) {
-        SendDelete(id);
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        Swal.fire("Cancelado", "O teu filme está a salvo :)", "error");
+    toast(
+      (t) => (
+        <div>
+          <strong>Tens a certeza?</strong>
+          <div className="mt-2">Não vai ser possível recuperar após eliminado!</div>
+          <div className="mt-3 d-flex gap-2 justify-content-center">
+            <button
+              className="btn btn-danger btn-sm"
+              onClick={() => {
+                toast.dismiss(t);
+                SendDelete(id);
+              }}
+            >
+              Sim, eliminar!
+            </button>
+            <button
+              className="btn btn-secondary btn-sm"
+              onClick={() => {
+                toast.dismiss(t);
+                toast.error("Cancelado. O teu filme está a salvo :)");
+              }}
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      ),
+      {
+        duration: 10000,
+        position: "top-center",
+        closeButton: false,
+        style: { minWidth: 320 },
       }
-    });
+    );
   }
 
   function SendDelete(userId) {
@@ -68,16 +85,15 @@ const FilmeLista = () => {
       .delete(baseUrl)
       .then((response) => {
         if (response.data.success) {
-          Swal.fire("Eliminado!", "O teu filme foi eliminado", "success");
+          toast.success("O teu filme foi eliminado!");
           LoadFilmes();
         }
       })
       .catch(() => {
-        alert("Erro ao eliminar filme");
+        toast.error("Erro ao eliminar filme");
       });
   }
 
-  // Filtra os filmes conforme o texto da barra de pesquisa
   const filmesFiltrados = dataFilmes.filter(
     (data) =>
       data.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -86,8 +102,7 @@ const FilmeLista = () => {
 
   return (
     <div className="container">
-      <h2>Lista de Filmes</h2>
-      <div className="mb-3">
+      <div className="mb-5">
         <input
           type="text"
           className="form-control"
@@ -96,11 +111,12 @@ const FilmeLista = () => {
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
+      <h2>Lista de Filmes</h2>
       {filmesFiltrados.length === 0 ? (
         <p>Nenhum filme encontrado.</p>
       ) : (
-        <table className="table table-hover table-striped">
-          <thead className="thead-dark">
+        <table className="table">
+          <thead>
             <tr>
               <th scope="col">#</th>
               <th scope="col">Título</th>
@@ -126,7 +142,7 @@ const FilmeLista = () => {
                 <td>{data.Genero?.description || "Sem género"}</td>
                 <td>
                   <Link
-                    className="btn btn-outline-info"
+                    className="btn"
                     to={`/filmes/editar/${data.id}`}
                   >
                     Editar
@@ -134,7 +150,7 @@ const FilmeLista = () => {
                 </td>
                 <td>
                   <button
-                    className="btn btn-outline-danger"
+                    className="btn"
                     onClick={() => OnDelete(data.id)}
                   >
                     Apagar

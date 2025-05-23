@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min";
 import axios from "axios";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const FilmeAdicionar = () => {
   const [campTitulo, setCampTitulo] = useState("");
@@ -9,8 +9,8 @@ const FilmeAdicionar = () => {
   const [campFoto, setCampFoto] = useState("");
   const [campGenero, setCampGenero] = useState("");
   const [generos, setGeneros] = useState([]);
+  const navigate = useNavigate();
 
-  //Estado para armazenar os géneros
   useEffect(() => {
     axios
       .get("http://localhost:3000/genero/listar")
@@ -24,12 +24,11 @@ const FilmeAdicionar = () => {
     e.preventDefault();
     const baseUrl = "http://localhost:3000/filmes/criar";
 
-    // Cria o objeto com os dados do filme
     const datapost = {
       title: campTitulo,
       description: campDescricao,
       picture: campFoto,
-      generoId: parseInt(campGenero), // Converte para número
+      generoId: parseInt(campGenero),
     };
 
     axios
@@ -40,18 +39,18 @@ const FilmeAdicionar = () => {
       })
       .then((response) => {
         if (response.data.success) {
-          alert(response.data.message);
-          // Limpa o formulário após sucesso
+          toast.success("Filme adicionado com sucesso!");
           setCampTitulo("");
           setCampDescricao("");
           setCampFoto("");
           setCampGenero("");
+          navigate("/");
         } else {
-          alert(response.data.message);
+          toast.error(response.data.message);
         }
       })
       .catch((error) => {
-        alert("Erro: " + error.message);
+        toast.error("Erro: " + error.message);
       });
   }
 
@@ -103,6 +102,16 @@ const FilmeAdicionar = () => {
               value={campFoto}
               onChange={(e) => setCampFoto(e.target.value)}
             />
+            {campFoto && (
+              <div className="mt-2">
+                <img
+                  src={campFoto}
+                  alt="Preview"
+                  style={{ maxWidth: "150px", maxHeight: "150px", border: "1px solid #ccc" }}
+                  onError={(e) => { e.target.style.display = "none"; }}
+                />
+              </div>
+            )}
           </div>
         </div>
         <div className="form-group row mb-3">
@@ -123,10 +132,10 @@ const FilmeAdicionar = () => {
                   {g.description}
                 </option>
               ))}
-              </select>
+            </select>
           </div>
         </div>
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn">
           Salvar
         </button>
       </form>

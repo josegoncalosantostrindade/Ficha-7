@@ -2,7 +2,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const baseUrl = "http://localhost:3000";
 
@@ -13,6 +14,7 @@ const FilmeEditar = () => {
   const [campGenero, setCampGenero] = useState("");
   const [generos, setGeneros] = useState([]);
   const { filmeId } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const url = `${baseUrl}/filmes/get/${filmeId}`;
@@ -26,11 +28,11 @@ const FilmeEditar = () => {
           setCampFoto(data.picture || "");
           setCampGenero(data.generoId ? data.generoId.toString() : "");
         } else {
-          alert("Erro no Serviço Web");
+          toast.error("Erro no Serviço Web");
         }
       })
       .catch((error) => {
-        alert("Erro no servidor: " + error.message);
+        toast.error("Erro no servidor: " + error.message);
       });
   }, [filmeId]);
 
@@ -62,13 +64,14 @@ const FilmeEditar = () => {
       })
       .then((response) => {
         if (response.data.success) {
-          alert(response.data.message);
+          toast.success("Filme editado com sucesso!");
+          navigate("/");
         } else {
-          alert("Erro: " + response.data.message);
+          toast.error("Erro: " + response.data.message);
         }
       })
       .catch((error) => {
-        alert("Erro: " + error.message);
+        toast.error("Erro: " + error.message);
       });
   }
 
@@ -127,7 +130,7 @@ const FilmeEditar = () => {
             ))}
           </select>
         </div>
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn">
           Atualizar
         </button>
       </form>

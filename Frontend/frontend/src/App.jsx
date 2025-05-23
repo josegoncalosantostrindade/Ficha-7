@@ -4,14 +4,17 @@ import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import FilmeLista from "./view/movieList";
 import FilmeAdicionar from "./view/movieAdd";
 import FilmeEditar from "./view/movieEdit";
+import { Toaster } from "sonner";
+import "./App.css";
 
 function App() {
   return (
     <Router>
       <div className="App">
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+        <Toaster />
+        <nav className="navbar navbar-expand-lg">
           <div className="container-fluid">
-            <a className="navbar-brand text-danger" href="/">
+            <a className="navbar-brand" href="/">
               Movies
             </a>
             <button
@@ -29,7 +32,7 @@ function App() {
               <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li className="nav-item">
                   <Link
-                    className="nav-link btn btn-success text-white"
+                    className="nav-link"
                     to="/filmes/adicionar"
                   >
                     Adicionar Filme
